@@ -1,16 +1,18 @@
-RTV = RTV or {}
+if GAMEMODE_NAME == "morbusgame" then
+    RTV = {}
+else
+    RTV = RTV or {}
+end
 
 RTV.ChatCommands = {
-	
 	"!rtv",
 	"/rtv",
 	"rtv"
-
 }
 
 RTV.TotalVotes = 0
 
-RTV.Wait = 60 -- The wait time in seconds. This is how long a player has to wait before voting when the map changes. 
+RTV.Wait = 60 -- The wait time in seconds. This is how long a player has to wait before voting when the map changes.
 
 RTV._ActualWait = CurTime() + RTV.Wait
 
@@ -25,31 +27,29 @@ function RTV.RemoveVote()
 end
 
 function RTV.Start()
-			if GAMEMODE_NAME == "terrortown" then
-				net.Start("RTV_Delay")
-        		net.Broadcast()
- 
-				hook.Add("TTTEndRound", "MapvoteDelayed", function()
-					MapVote.Start(nil, nil, nil, nil)
-				end)
-			elseif GAMEMODE_NAME == "deathrun" then
-				net.Start("RTV_Delay")
-        		net.Broadcast()
+	if GAMEMODE_NAME == "terrortown" then
+		net.Start("RTV_Delay")
+        net.Broadcast()
 
-				hook.Add("RoundEnd", "MapvoteDelayed", function()
-					MapVote.Start(nil, nil, nil, nil)
-				end)
-			else
-				PrintMessage( HUD_PRINTTALK, "The vote has been rocked, map vote imminent")
-				timer.Simple(4, function()
-					MapVote.Start(nil, nil, nil, nil)
-				end)
-			end
+		hook.Add("TTTEndRound", "MapvoteDelayed", function()
+			MapVote.Start(nil, nil, nil, nil)
+		end)
+	elseif GAMEMODE_NAME == "deathrun" then
+		net.Start("RTV_Delay")
+        net.Broadcast()
+
+		hook.Add("RoundEnd", "MapvoteDelayed", function()
+			MapVote.Start(nil, nil, nil, nil)
+		end)
+	else
+		PrintMessage( HUD_PRINTTALK, "The vote has been rocked, map vote imminent")
+		timer.Simple(4, function()
+			MapVote.Start(nil, nil, nil, nil)
+		end)
+	end
 end
 
-
 function RTV.AddVote( ply )
-
 	if RTV.CanVote( ply ) then
 		RTV.TotalVotes = RTV.TotalVotes + 1
 		ply.RTVoted = true
@@ -60,28 +60,23 @@ function RTV.AddVote( ply )
 			RTV.Start()
 		end
 	end
-
 end
 
 hook.Add( "PlayerDisconnected", "Remove RTV", function( ply )
-
 	if ply.RTVoted then
 		RTV.RemoveVote()
 	end
 
 	timer.Simple( 0.1, function()
-
 		if RTV.ShouldChange() then
 			RTV.Start()
 		end
-
 	end )
-
 end )
 
 function RTV.CanVote( ply )
 	local plyCount = table.Count(player.GetAll())
-	
+
 	if RTV._ActualWait >= CurTime() then
 		return false, "You must wait a bit before voting!"
 	end
@@ -121,10 +116,10 @@ end
 concommand.Add( "rtv_start", RTV.StartVote )
 
 hook.Add( "PlayerSay", "RTV Chat Commands", function( ply, text )
-
-	if table.HasValue( RTV.ChatCommands, string.lower(text) ) then
-		RTV.StartVote( ply )
-		return ""
-	end
-
+    if GAMEMODE_NAME ~= "stopitslender" then
+        if table.HasValue( RTV.ChatCommands, string.lower(text) ) then
+            RTV.StartVote( ply )
+            return ""
+        end
+    end
 end )

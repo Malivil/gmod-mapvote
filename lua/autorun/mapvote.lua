@@ -9,8 +9,11 @@ MapVoteConfigDefault = {
     EnableCooldown = true,
     MapsBeforeRevote = 3,
     RTVPlayerCount = 3,
-    MapPrefixes = {"ttt_"}
+    MapPrefixes = {"ttt_"},
+    AdditionalMaps = {
+        murder = "gm_housewithgardenv2|de_forest|cs_office|cs_italy"
     }
+}
 --Default Config
 
 hook.Add( "Initialize", "MapVoteConfigSetup", function()
@@ -18,7 +21,7 @@ hook.Add( "Initialize", "MapVoteConfigSetup", function()
         file.CreateDir( "mapvote" )
     end
     if not file.Exists( "mapvote/config.txt", "DATA" ) then
-        file.Write( "mapvote/config.txt", util.TableToJSON( MapVoteConfigDefault ) )
+        file.Write( "mapvote/config.txt", util.TableToJSON( MapVoteConfigDefault, true ) )
     end
 end )
 

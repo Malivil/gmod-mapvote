@@ -108,7 +108,6 @@ function PANEL:Init()
     end
 
     self.closeButton.DoClick = function()
-        print("HI")
         self:SetVisible(false)
     end
 
