@@ -9,7 +9,7 @@ MapVoteConfigDefault = {
     EnableCooldown = true,
     MapsBeforeRevote = 3,
     RTVPlayerCount = 3,
-    MapPrefixes = {"ttt_"},
+    MapPrefixes = {},
     AdditionalMaps = {
         murder = "gm_housewithgardenv2|de_forest|cs_office|cs_italy"
     }
@@ -26,14 +26,14 @@ hook.Add( "Initialize", "MapVoteConfigSetup", function()
 end )
 
 function MapVote.HasExtraVotePower(ply)
-	-- Example that gives admins more voting power
-	--[[
+    -- Example that gives admins more voting power
+    --[[
     if ply:IsAdmin() then
-		return true
-	end 
+        return true
+    end
     ]]
 
-	return false
+    return false
 end
 
 
