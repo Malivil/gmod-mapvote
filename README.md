@@ -9,6 +9,11 @@ The following changes were made:
 * Modified to include all maps with the prefix(es) located in the 'gamemode'.txt file by default. This allows it to work on ideally all gamemodes.
 * Allows you to include more maps for a specific gamemode
 
+Installation
+======================
+* If applicable, unsubscribe to any previous MapVote addons and remove it from the collection that the server uses
+* Download and just drag the lua folder into steamcmd\steamapps\common\GarrysModDS\garrysmod. **This will overwrite any existing files related to MapVote if you had any previously.** This is important only if you made any custom changes to the sourcode previously.
+
 
 Usage
 =======================
@@ -52,11 +57,11 @@ You can edit the config.txt located in garrysmod/data/mapvote/ to change several
 }
 ```
 * "RTVPlayerCount" is the minimum number of players that need to be online (on TTT) for RTV to work.
-* "AdditionalMaps" is the additional maps or map prefixes it should include for a specific gamemode.
+* "AdditionalMaps" are the additional maps or map prefixes it should include for a specific gamemode.
 * "MapLimit" is the number of maps shown on the vote screen.
 * "TimeLimit" is how long the vote is shown for.
 * "AllowCurrentMap" true/false to allow a the current map in the map vote list.
-* "MapPrefixes" are the prefixes of the maps that should be used in the vote. Leave empty if you want to use the map prefixes found in the 'gamemode'.txt file.
+* "MapPrefixes" are the prefixes of the maps that should be used in the vote. **Leave it empty if you want to use the map prefixes found in the 'gamemode'.txt file.**
 * "MapsBeforeRevote" is the number of maps that must be played before a map is in the vote menu again (if EnableCooldown is true)
 * "EnableCooldown" is a true/false variable on whether to remove a map from voting for a while after it's played.
 * "MapsBeforeRevote" is how many maps before the map is taken off the cooldown list after it's played.
