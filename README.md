@@ -3,11 +3,10 @@ MapVote
 
 MapVote is a wonderful little GMOD13 addon originally made by [Willox](http://steamcommunity.com/id/Willox303) that allows you to easily invoke a map vote from within any gamemode of your choosing.
 
-This version forks Tyrantelf's version.
+This version forks Xterminator's version.
 
 The following changes were made:
-* Modified to include all maps with the prefix(es) located in the 'gamemode'.txt file by default. This allows it to work on ideally all gamemodes.
-* Allows you to include more maps for a specific gamemode
+* You can now exclude maps from query, on min or max Players
 
 Installation
 ======================
@@ -44,7 +43,7 @@ You can edit the config.txt located in garrysmod/data/mapvote/ to change several
 ```JSON
 {
 	"RTVPlayerCount": 3,
-	"AdditionalMaps": 
+	"AdditionalMaps":
 	{
 		"murder": "gm_housewithgardenv2|de_forest|cs_office|cs_italy"
 	},
@@ -52,6 +51,7 @@ You can edit the config.txt located in garrysmod/data/mapvote/ to change several
 	"TimeLimit": 28,
 	"AllowCurrentMap": false,
 	"MapPrefixes": [],
+	"MapConfigs": [],
 	"MapsBeforeRevote": 3,
 	"EnableCooldown": true
 }
@@ -62,22 +62,23 @@ You can edit the config.txt located in garrysmod/data/mapvote/ to change several
 * "TimeLimit" is how long the vote is shown for.
 * "AllowCurrentMap" true/false to allow a the current map in the map vote list.
 * "MapPrefixes" are the prefixes of the maps that should be used in the vote. **Leave it empty if you want to use the map prefixes found in the 'gamemode'.txt file.**
+* "MapConfigs" are extra configs per map (see examples down there)
 * "MapsBeforeRevote" is the number of maps that must be played before a map is in the vote menu again (if EnableCooldown is true)
 * "EnableCooldown" is a true/false variable on whether to remove a map from voting for a while after it's played.
 * "MapsBeforeRevote" is how many maps before the map is taken off the cooldown list after it's played.
 
-To add more Map Prefixes, do this: 
+To add more Map Prefixes, do this:
 ```JSON
 {
 	"RTVPlayerCount": 3,
-	"AdditionalMaps": 
+	"AdditionalMaps":
 	{
 		"murder": "gm_housewithgardenv2|de_forest|cs_office|cs_italy"
 	},
 	"MapLimit": 24,
 	"TimeLimit": 28,
 	"AllowCurrentMap": false,
-	"MapPrefixes": 
+	"MapPrefixes":
 	[
 		"ttt_",
 		"zm_",
@@ -88,11 +89,11 @@ To add more Map Prefixes, do this:
 }
 ```
 
-To add additional maps to specific gamemodes, do this: 
+To add additional maps to specific gamemodes, do this:
 ```JSON
 {
 	"RTVPlayerCount": 3,
-	"AdditionalMaps": 
+	"AdditionalMaps":
 	{
 		"murder": "gm_housewithgardenv2|de_forest|cs_office|cs_italy",
 		"terrortown": "cs_"
@@ -100,7 +101,40 @@ To add additional maps to specific gamemodes, do this:
 	"MapLimit": 24,
 	"TimeLimit": 28,
 	"AllowCurrentMap": false,
-	"MapPrefixes": 
+	"MapPrefixes":
+	[
+		"ttt_",
+		"zm_",
+		"de_"
+	],
+	"MapsBeforeRevote": 3,
+	"EnableCooldown": true
+}
+```
+
+To add Min / Max per map do this
+```JSON
+{
+	"RTVPlayerCount": 3,
+	"AdditionalMaps":
+	{
+		"murder": "gm_housewithgardenv2|de_forest|cs_office|cs_italy",
+		"terrortown": "cs_"
+	},
+	"MapConfigs":
+	{
+		"ttt_mw2_terminal": {
+			"Min": 4
+		},
+		"ttt_airbus_b3": {
+			"Max": 8,
+			"Min": 2
+		}
+	},
+	"MapLimit": 24,
+	"TimeLimit": 28,
+	"AllowCurrentMap": false,
+	"MapPrefixes":
 	[
 		"ttt_",
 		"zm_",

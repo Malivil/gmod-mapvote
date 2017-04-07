@@ -95,6 +95,7 @@ function MapVote.Start(length, current, limit, prefix, callback)
             table.insert(search_prefixes, "^"..v)
         end
     end
+
     if MapVote.Config.AdditionalMaps != nil then
         for k, v in pairs(MapVote.Config.AdditionalMaps) do
             if k == GAMEMODE_NAME then
@@ -103,6 +104,24 @@ function MapVote.Start(length, current, limit, prefix, callback)
                     table.insert(search_prefixes, "^"..map_prefix)
                 end
                 break
+            end
+        end
+    end
+
+
+    local playercount = 0
+    for _ in pairs(player:GetAll()) do playercount = playercount +1 end
+    if MapVote.Config.MapConfigs != nil then
+        for k, v in pairs(MapVote.Config.MapConfigs) do
+            if table.HasValue(maps, k..".bsp") then
+                for _k, _v in pairs(maps) do
+                    if _v == k..".bsp" then
+                        if (MapVote.Config.MapConfigs[k].Min and playercount < MapVote.Config.MapConfigs[k].Min) or (MapVote.Config.MapConfigs[k].Max and playercount > MapVote.Config.MapConfigs[k].Max) then
+                            table.remove(maps, _k);
+                        end
+                    end
+                end
+
             end
         end
     end

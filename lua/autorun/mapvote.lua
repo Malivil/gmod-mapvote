@@ -9,10 +9,11 @@ MapVoteConfigDefault = {
     EnableCooldown = true,
     MapsBeforeRevote = 3,
     RTVPlayerCount = 3,
-    MapPrefixes = {},
+    MapPrefixes = {"ttt_"},
     AdditionalMaps = {
-        murder = "gm_housewithgardenv2|de_forest|cs_office|cs_italy"
-    }
+        murder = ""
+    },
+    MapConfigs = {}
 }
 --Default Config
 
