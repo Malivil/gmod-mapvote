@@ -6,6 +6,7 @@
 	[
 		"LICENSE",
 		"addon.txt",
+		"addon.jpg",
 		"*.md",
 		".git*"
 	]
