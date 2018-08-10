@@ -39,18 +39,6 @@ else
     MapVote.Config = {}
 end
 
-if file.Exists( "mapvote/votemaps.txt", "DATA" ) then
-    excludemaps = file.Read("mapvote/votemaps.txt", "DATA")
-
-    for idx, line in pairs(excludemaps) do
-        if string.StartWith( line, ";" ) then
-            table.remove(excludemaps, idx);
-        end
-    end
-else
-    excludemaps = {}
-end
-
 function CoolDownDoStuff()
     cooldownnum = MapVote.Config.MapsBeforeRevote or 3
 
@@ -136,18 +124,36 @@ function MapVote.Start(length, current, limit, prefix, callback)
         end
     end
 
-    if excludemaps != nil then
-        for k, v in pairs(excludemaps) do
-            if table.HasValue(maps, v..".bsp") then
-                for _k, _v in pairs(maps) do
-                    if _v == v..".bsp" then
-                        table.remove(maps, _k);
-                        break
-                    end
-                end
-            end
-        end
-    end
+	print("Loading excludes")
+	local excludemaps = {}
+	if file.Exists( "ulx/votemaps.txt", "DATA" ) then
+		excludemaps = string.Split(file.Read("ulx/votemaps.txt", "DATA"), "\n")
+		print("Exclude list - Pre")
+		PrintTable(excludemaps)
+		for idx, line in pairs(excludemaps) do
+			if string.StartWith( line, ";" ) then
+				table.remove(excludemaps, idx);
+			end
+		end
+		print("Exclude list - Post")
+		PrintTable(excludemaps)
+	end
+
+	print("Exclude list - Iterate")
+	PrintTable(excludemaps)
+	for k, v in pairs(excludemaps) do
+		local excludemap = string.Trim(v, "\r")
+		print("Checking "..excludemap)
+		if table.HasValue(maps, excludemap..".bsp") then
+			for _k, _v in pairs(maps) do
+				if _v == excludemap..".bsp" then
+					table.remove(maps, _k);
+					print("Removing "..excludemap.." (".._k..")")
+					break
+				end
+			end
+		end
+	end
 
     for k, map in RandomPairs(maps) do
         if(not current and game.GetMap():lower()..".bsp" == map) then continue end
