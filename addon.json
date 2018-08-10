@@ -1,0 +1,10 @@
+{
+	"title"		:	"MapVote",
+	"type"		:	"ServerContent",
+	"tags"		:	[ ],
+	"ignore"	:
+	[
+		"*.md",
+		"addon.txt"
+	]
+}
