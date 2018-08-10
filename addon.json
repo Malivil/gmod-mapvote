@@ -4,6 +4,7 @@
 	"tags"		:	[ ],
 	"ignore"	:
 	[
+		"LICENSE",
 		"*.md",
 		"addon.txt"
 	]
