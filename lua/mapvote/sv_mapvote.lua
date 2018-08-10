@@ -39,6 +39,18 @@ else
     MapVote.Config = {}
 end
 
+if file.Exists( "ulx/votemaps.txt", "DATA" ) then
+	excludemaps = string.Split(file.Read("ulx/votemaps.txt", "DATA"), "\n")
+	for idx=#excludemaps,1,-1 do
+		local line = excludemaps[idx];
+		if string.len(line) == 0 or string.StartWith(line, ";") then
+			table.remove(excludemaps, idx);
+		end
+	end
+else
+	excludemaps = {}
+end
+
 function CoolDownDoStuff()
     cooldownnum = MapVote.Config.MapsBeforeRevote or 3
 
@@ -112,7 +124,8 @@ function MapVote.Start(length, current, limit, prefix, callback)
     if MapVote.Config.MapConfigs != nil then
         for k, v in pairs(MapVote.Config.MapConfigs) do
             if table.HasValue(maps, k..".bsp") then
-                for _k, _v in pairs(maps) do
+				for _k=#maps,1,-1 do
+					local _v = maps[_k];
                     if _v == k..".bsp" then
                         if (MapVote.Config.MapConfigs[k].Min and playercount < MapVote.Config.MapConfigs[k].Min) or (MapVote.Config.MapConfigs[k].Max and playercount > MapVote.Config.MapConfigs[k].Max) then
                             table.remove(maps, _k);
@@ -124,31 +137,13 @@ function MapVote.Start(length, current, limit, prefix, callback)
         end
     end
 
-	print("Loading excludes")
-	local excludemaps = {}
-	if file.Exists( "ulx/votemaps.txt", "DATA" ) then
-		excludemaps = string.Split(file.Read("ulx/votemaps.txt", "DATA"), "\n")
-		print("Exclude list - Pre")
-		PrintTable(excludemaps)
-		for idx, line in pairs(excludemaps) do
-			if string.StartWith( line, ";" ) then
-				table.remove(excludemaps, idx);
-			end
-		end
-		print("Exclude list - Post")
-		PrintTable(excludemaps)
-	end
-
-	print("Exclude list - Iterate")
-	PrintTable(excludemaps)
 	for k, v in pairs(excludemaps) do
 		local excludemap = string.Trim(v, "\r")
-		print("Checking "..excludemap)
 		if table.HasValue(maps, excludemap..".bsp") then
-			for _k, _v in pairs(maps) do
+			for _k=#maps,1,-1 do
+				local _v = maps[_k];
 				if _v == excludemap..".bsp" then
 					table.remove(maps, _k);
-					print("Removing "..excludemap.." (".._k..")")
 					break
 				end
 			end
