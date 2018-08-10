@@ -39,10 +39,22 @@ else
     MapVote.Config = {}
 end
 
+if file.Exists( "mapvote/votemaps.txt", "DATA" ) then
+    excludemaps = file.Read("mapvote/votemaps.txt", "DATA")
+
+    for idx, line in pairs(excludemaps) do
+        if string.StartWith( line, ";" ) then
+            table.remove(excludemaps, idx);
+        end
+    end
+else
+    excludemaps = {}
+end
+
 function CoolDownDoStuff()
     cooldownnum = MapVote.Config.MapsBeforeRevote or 3
 
-    if table.getn(recentmaps) == cooldownnum then
+    while table.getn(recentmaps) > cooldownnum do
         table.remove(recentmaps)
     end
 
@@ -108,9 +120,7 @@ function MapVote.Start(length, current, limit, prefix, callback)
         end
     end
 
-
-    local playercount = 0
-    for _ in pairs(player:GetAll()) do playercount = playercount +1 end
+    local playercount = player.GetCount();
     if MapVote.Config.MapConfigs != nil then
         for k, v in pairs(MapVote.Config.MapConfigs) do
             if table.HasValue(maps, k..".bsp") then
@@ -118,10 +128,23 @@ function MapVote.Start(length, current, limit, prefix, callback)
                     if _v == k..".bsp" then
                         if (MapVote.Config.MapConfigs[k].Min and playercount < MapVote.Config.MapConfigs[k].Min) or (MapVote.Config.MapConfigs[k].Max and playercount > MapVote.Config.MapConfigs[k].Max) then
                             table.remove(maps, _k);
+                            break
                         end
                     end
                 end
+            end
+        end
+    end
 
+    if excludemaps != nil then
+        for k, v in pairs(excludemaps) do
+            if table.HasValue(maps, v..".bsp") then
+                for _k, _v in pairs(maps) do
+                    if _v == v..".bsp" then
+                        table.remove(maps, _k);
+                        break
+                    end
+                end
             end
         end
     end
