@@ -5,7 +5,8 @@
 	"ignore"	:
 	[
 		"LICENSE",
+		"addon.txt",
 		"*.md",
-		"addon.txt"
+		".git*"
 	]
 }
