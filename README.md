@@ -11,7 +11,7 @@ The following changes were made:
 Installation
 ======================
 * If applicable, unsubscribe to any previous MapVote addons and remove it from the collection that the server uses
-* Download and just drag the lua folder into steamcmd\steamapps\common\GarrysModDS\garrysmod. **This will overwrite any existing files related to MapVote if you had any previously.** This is important only if you made any custom changes to the sourcode previously.
+* Download and just drag the lua folder into steamcmd\steamapps\common\GarrysModDS\garrysmod. **This will overwrite any existing files related to MapVote if you had any previously.** This is important only if you made any custom changes to the sourcecode previously.
 
 
 Usage
