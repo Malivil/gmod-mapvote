@@ -72,7 +72,7 @@ function MapVote.Start(length, current, limit, prefix, callback)
     length = length or MapVote.Config.TimeLimit or 28
     limit = limit or MapVote.Config.MapLimit or 24
     cooldown = MapVote.Config.EnableCooldown or MapVote.Config.EnableCooldown == nil and true
-    prefix = prefix or MapVote.Config.MapPrefixes
+    prefix = prefix or MapVote.Config.MapPrefixes or {}
 
     if prefix and type(prefix) ~= "table" then
         prefix = {prefix}
