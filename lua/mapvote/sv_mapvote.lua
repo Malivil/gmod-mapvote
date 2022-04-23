@@ -55,7 +55,7 @@ local cooldownnum
 function CoolDownDoStuff()
     cooldownnum = MapVote.Config.MapsBeforeRevote or 3
 
-    while table.getn(recentmaps) > cooldownnum do
+    while table.Count(recentmaps) > cooldownnum do
         table.remove(recentmaps)
     end
 
@@ -240,6 +240,6 @@ function MapVote.Cancel()
         net.Start("RAM_MapVoteCancel")
         net.Broadcast()
 
-        timer.Destroy("RAM_MapVote")
+        timer.Remove("RAM_MapVote")
     end
 end
