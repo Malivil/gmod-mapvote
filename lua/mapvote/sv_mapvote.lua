@@ -1,6 +1,7 @@
 util.AddNetworkString("RAM_MapVoteStart")
 util.AddNetworkString("RAM_MapVoteUpdate")
 util.AddNetworkString("RAM_MapVoteCancel")
+util.AddNetworkString("RAM_MapVoteOpen")
 util.AddNetworkString("RTV_Delay")
 
 MapVote.Continued = false
@@ -243,3 +244,24 @@ function MapVote.Cancel()
         timer.Remove("RAM_MapVote")
     end
 end
+
+local chatCommands = {
+    "!vote",
+    "/vote",
+    "vote",
+    "!mapvote",
+    "/mapvote",
+    "mapvote"
+}
+hook.Add("PlayerSay", "Map Vote Commands", function(ply, text)
+    -- Don't use "!" for admin because they are already used elsewhere
+    if string.StartWith(text, "!") and ply:IsAdmin() then return end
+
+    if GAMEMODE_NAME ~= "stopitslender" then
+        if table.HasValue(chatCommands, string.lower(text)) then
+            net.Start("RAM_MapVoteOpen")
+            net.Send(ply)
+            return ""
+        end
+    end
+end)
