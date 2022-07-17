@@ -3,10 +3,11 @@ MapVote
 
 MapVote is a wonderful little GMOD13 addon originally made by [Willox](http://steamcommunity.com/id/Willox303) that allows you to easily invoke a map vote from within any gamemode of your choosing.
 
-This version forks Xterminator's version.
+This version forks [EX3MP's version](https://github.com/EX3MP/gmod-mapvote) and merges some functionality from [Lumien's version](https://github.com/lumien231/Lumiens-Map-Vote).
 
 The following changes were made:
-* You can now exclude maps from query, on min or max Players
+* Maps excluded in the ULX votemap settings are automatically excluded from selection
+* Selection UI uses a slightly-modified version of Lumien's UI which shows map icons
 
 Installation
 ======================
