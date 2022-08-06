@@ -176,6 +176,7 @@ function PANEL:AddVoter(voter)
     icon_container.Player = voter
     icon:SetPlayer(voter, 32)
     icon_container:SetSize(36, 36)
+    icon_container:SetText("")
     icon:SetPos(4, 4)
 
     icon_container.Paint = function(s, w, h)
