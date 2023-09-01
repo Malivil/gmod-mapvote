@@ -351,9 +351,7 @@ end
 derma.DefineControl("RAM_VoteScreen", "", PANEL, "DPanel")
 
 local function OpenPanel()
-    print("OpenPanel")
     if IsValid(MapVote.Panel) then
-        print("Valid!")
         MapVote.Panel:SetVisible(true)
     end
 end
