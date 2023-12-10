@@ -74,6 +74,86 @@ net.Receive("RTV_Delay", function()
     chat.AddText(Color(102,255,51), "[RTV]", Color(255,255,255), " The vote has been rocked, map vote will begin on round end")
 end)
 
+local defaultMapThumbnail = "maps/thumb/noicon.png"
+local function GetMapThumbnail(name)
+    if file.Exists("maps/thumb/" .. name .. ".png", "GAME") then
+        return "maps/thumb/" .. name .. ".png"
+    elseif file.Exists("maps/" .. name .. ".png", "GAME") then
+        return "maps/" .. name .. ".png"
+    elseif file.Exists("map_thumbnails/maps/thumb/" .. name .. ".png", "DATA") then
+        return "data/map_thumbnails/maps/thumb/" .. name .. ".png"
+    else
+        return defaultMapThumbnail
+    end
+end
+
+-- Map icon download logic adapted from PAM Automatic Map Icon Downloader
+-- https://steamcommunity.com/sharedfiles/filedetails/?id=2812947175
+
+local mapAddons = {}
+local function DownloadMapIcons(map_name)
+    local foundMap = nil
+    for index, map in ipairs(mapAddons) do
+        if string.find(map.title, map_name) or
+            string.find(map.file, map_name) or
+            string.find(map_name, map.title) then
+            foundMap = map.wsid;
+            break
+        else
+            local sanstring = string.match(map_name, "_(.*)")
+            if sanstring == nil then
+                continue
+            end
+            sanstring = string.sub(string.gsub(sanstring, "_", ""), 1, 5)
+            if string.find(map.title, sanstring) then
+                foundMap = map.wsid;
+                break
+            end
+        end
+    end
+
+    if not foundMap then return end
+
+    -- Download the preview image from the found map's workshop page
+    steamworks.FileInfo(foundMap, function(result)
+        steamworks.Download(result.previewid, true, function(name)
+            if not file.Exists("map_thumbnails/maps/thumb/" .. map_name .. ".png", "DATA") then
+                local fileData = file.Read(name, "GAME");
+                file.Write("map_thumbnails/maps/thumb/" .. map_name .. ".png", fileData);
+            end
+        end)
+    end)
+end
+
+local downloadMissingMapIcons = CreateClientConVar("mapvote_download_missing_icons",  "1", true, false, "Whether the addon should try to download missing map icons from the workshop", 0, 1)
+hook.Add("Initialize", "MapVote_MissingIcons_Initialize", function()
+    if not downloadMissingMapIcons:GetBool() then return end
+
+    -- Use the same storage path that the source PAM icon downloader does so we don't duplicate
+    if not file.IsDir("map_thumbnails/maps/thumb", "DATA") then
+        file.CreateDir("map_thumbnails/maps/thumb")
+    end
+
+    -- Find all addons with "map" in the tags
+    for index, value in ipairs(engine.GetAddons()) do
+        if string.find(string.lower(value.tags), "map") then
+            value.title = string.lower(value.title)
+            value.file = string.lower(value.file)
+            table.insert(mapAddons, value)
+        end
+    end
+
+    -- Find all maps that don't have a thumbnail in any path we check and try to download one
+    local allMaps = file.Find("maps/*.bsp", "GAME")
+    for index, map_name in ipairs(allMaps) do
+        map_name = string.StripExtension(map_name)
+
+        if GetMapThumbnail(map_name) == defaultMapThumbnail then
+            DownloadMapIcons(map_name)
+        end
+    end
+end)
+
 local PANEL = {}
 function PANEL:Init()
     self:ParentToHUD()
@@ -267,7 +347,7 @@ function PANEL:SetMaps(maps)
         end
 
         local button = vgui.Create("DImageButton", panel)
-        button:SetImage(getMapThumbnail(map))
+        button:SetImage(GetMapThumbnail(map))
 
         -- If the panel is clicked, click the button instead
         function panel:OnMousePressed()
@@ -296,16 +376,6 @@ function PANEL:SetMaps(maps)
         end
 
         self.mapList:AddItem(panel)
-    end
-end
-
-function getMapThumbnail(name)
-    if file.Exists("maps/thumb/" .. name .. ".png", "GAME") then
-        return "maps/thumb/" .. name .. ".png"
-    elseif file.Exists("maps/" .. name .. ".png", "GAME") then
-        return "maps/" .. name .. ".png"
-    else
-        return "maps/thumb/noicon.png"
     end
 end
 
