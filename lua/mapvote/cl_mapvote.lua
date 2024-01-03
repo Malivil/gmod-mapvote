@@ -112,13 +112,20 @@ local function DownloadMapIcons(map_name)
         end
     end
 
+    -- Sanity check
     if not foundMap then return end
 
     -- Download the preview image from the found map's workshop page
     steamworks.FileInfo(foundMap, function(result)
+        -- Sanity check
+        if not result or not result.previewid then return end
+
         steamworks.Download(result.previewid, true, function(name)
             if not file.Exists("map_thumbnails/maps/thumb/" .. map_name .. ".png", "DATA") then
                 local fileData = file.Read(name, "GAME");
+                -- Sanity check
+                if not fileData then return end
+
                 file.Write("map_thumbnails/maps/thumb/" .. map_name .. ".png", fileData);
             end
         end)
