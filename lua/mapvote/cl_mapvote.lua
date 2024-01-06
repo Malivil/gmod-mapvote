@@ -121,6 +121,9 @@ local function DownloadMapIcons(map_name)
         if not result or not result.previewid then return end
 
         steamworks.Download(result.previewid, true, function(name)
+            -- Sanity check
+            if not name then return end
+
             if not file.Exists("map_thumbnails/maps/thumb/" .. map_name .. ".png", "DATA") then
                 local fileData = file.Read(name, "GAME");
                 -- Sanity check
