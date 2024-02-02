@@ -6,6 +6,7 @@ MapVoteConfigDefault = {
     MapLimit = 24,
     TimeLimit = 28,
     AllowCurrentMap = false,
+    AllowRandom = false,
     EnableCooldown = true,
     MapsBeforeRevote = 3,
     RTVPlayerCount = 3,
@@ -45,6 +46,8 @@ MapVote.Allow = false
 
 MapVote.UPDATE_VOTE = 1
 MapVote.UPDATE_WIN = 3
+
+MapVote.RandomPlaceholder = "#MapVoteRandom#"
 
 if SERVER then
     AddCSLuaFile()

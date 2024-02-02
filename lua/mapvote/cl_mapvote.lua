@@ -74,7 +74,8 @@ net.Receive("RTV_Delay", function()
     chat.AddText(Color(102,255,51), "[RTV]", Color(255,255,255), " The vote has been rocked, map vote will begin on round end")
 end)
 
-local defaultMapThumbnail = "maps/thumb/noicon.png"
+local defaultMapThumbnail = "materials/vgui/mapvote/missing.png"
+local randomMapThumbnail = "materials/vgui/mapvote/random.png"
 local function GetMapThumbnail(name)
     if file.Exists("maps/thumb/" .. name .. ".png", "GAME") then
         return "maps/thumb/" .. name .. ".png"
@@ -82,6 +83,8 @@ local function GetMapThumbnail(name)
         return "maps/" .. name .. ".png"
     elseif file.Exists("map_thumbnails/maps/thumb/" .. name .. ".png", "DATA") then
         return "data/map_thumbnails/maps/thumb/" .. name .. ".png"
+    elseif name == MapVote.RandomPlaceholder then
+        return randomMapThumbnail
     else
         return defaultMapThumbnail
     end
@@ -291,6 +294,9 @@ function PANEL:AddVoter(voter)
 end
 
 function PANEL:Think()
+    -- Make sure this doesn't get in the way of other stuff
+    self:MoveToBack()
+
     for _, v in pairs(self.mapList:GetItems()) do
         v.NumVotes = 0
     end
@@ -341,7 +347,7 @@ function PANEL:SetMaps(maps)
     self.mapList:Clear()
 
     local transCounter = 0
-    for k, map in RandomPairs(maps) do
+    for k, map in ipairs(maps) do
         local panel = vgui.Create("DLabel", self.mapList)
         panel.ID = k
         panel.NumVotes = 0
@@ -376,7 +382,11 @@ function PANEL:SetMaps(maps)
         local text = vgui.Create("DLabel", button)
         text:SetPos(0, 173)
         text:SetSize(196, 25)
-        text:SetText(map)
+        if map == MapVote.RandomPlaceholder then
+            text:SetText("Random Map")
+        else
+            text:SetText(map)
+        end
         text:SetContentAlignment(5)
         text:SetFont("RAM_VoteFont")
         text:SetPaintBackgroundEnabled(true)

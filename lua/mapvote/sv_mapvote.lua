@@ -69,12 +69,25 @@ function CoolDownDoStuff()
     file.Write("mapvote/recentmaps.txt", util.TableToJSON(recentmaps))
 end
 
+local function GetRandomFilteredMap(maps, search_prefixes)
+    for _, map in RandomPairs(maps) do
+        for _, search_prefix in pairs(search_prefixes) do
+            if string.find(map, search_prefix) then
+                return map:sub(1, -5)
+            end
+        end
+    end
+
+    return nil
+end
+
 function MapVote.Start(length, current, limit, prefix, callback)
     current = current or MapVote.Config.AllowCurrentMap or false
     length = length or MapVote.Config.TimeLimit or 28
     limit = limit or MapVote.Config.MapLimit or 24
     local cooldown = MapVote.Config.EnableCooldown or MapVote.Config.EnableCooldown == nil and true
     prefix = prefix or MapVote.Config.MapPrefixes or {}
+    local allowRandom = MapVote.Config.AllowRandom or false
 
     if prefix and type(prefix) ~= "table" then
         prefix = {prefix}
@@ -98,6 +111,11 @@ function MapVote.Start(length, current, limit, prefix, callback)
     local vote_maps = {}
     local map_count = 0
     local search_prefixes = {}
+
+    if allowRandom then
+        table.insert(vote_maps, MapVote.RandomPlaceholder)
+        map_count = map_count + 1
+    end
 
     if use_gamemode_maps then
         local map_prefixes = string.Split(prefix, "|")
@@ -215,6 +233,15 @@ function MapVote.Start(length, current, limit, prefix, callback)
             net.Broadcast()
 
             local map = MapVote.CurrentMaps[winner]
+            if map == MapVote.RandomPlaceholder then
+                map = GetRandomFilteredMap(maps, search_prefixes)
+                if map == nil then
+                    ErrorNoHalt("Could not find random map with the configured prefixes!\n")
+                    return
+                end
+                print("Selecting random map...", map)
+            end
+
             timer.Simple(4, function()
                 if hook.Run("MapVoteChange", map) ~= false then
                     if callback then
