@@ -51,6 +51,7 @@ You can edit the config.txt located in garrysmod/data/mapvote/ to change several
 	"MapLimit": 24,
 	"TimeLimit": 28,
 	"AllowCurrentMap": false,
+    "AllowRandom": false,
 	"MapPrefixes": [],
 	"MapConfigs": [],
 	"MapsBeforeRevote": 3,
@@ -61,7 +62,8 @@ You can edit the config.txt located in garrysmod/data/mapvote/ to change several
 * "AdditionalMaps" are the additional maps or map prefixes it should include for a specific gamemode.
 * "MapLimit" is the number of maps shown on the vote screen.
 * "TimeLimit" is how long the vote is shown for.
-* "AllowCurrentMap" true/false to allow a the current map in the map vote list.
+* "AllowCurrentMap" true/false to allow the current map in the map vote list.
+* "AllowRandom" true/false to show a "Random Map" entry in the map vote list
 * "MapPrefixes" are the prefixes of the maps that should be used in the vote. **Leave it empty if you want to use the map prefixes found in the 'gamemode'.txt file.**
 * "MapConfigs" are extra configs per map (see examples down there)
 * "MapsBeforeRevote" is the number of maps that must be played before a map is in the vote menu again (if EnableCooldown is true)
@@ -79,6 +81,7 @@ To add more Map Prefixes, do this:
 	"MapLimit": 24,
 	"TimeLimit": 28,
 	"AllowCurrentMap": false,
+    "AllowRandom": false,
 	"MapPrefixes":
 	[
 		"ttt_",
@@ -102,6 +105,7 @@ To add additional maps to specific gamemodes, do this:
 	"MapLimit": 24,
 	"TimeLimit": 28,
 	"AllowCurrentMap": false,
+    "AllowRandom": false,
 	"MapPrefixes":
 	[
 		"ttt_",
@@ -135,6 +139,7 @@ To add Min / Max per map do this
 	"MapLimit": 24,
 	"TimeLimit": 28,
 	"AllowCurrentMap": false,
+    "AllowRandom": false,
 	"MapPrefixes":
 	[
 		"ttt_",
