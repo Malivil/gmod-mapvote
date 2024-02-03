@@ -296,6 +296,7 @@ end
 function PANEL:Think()
     -- Make sure this doesn't get in the way of other stuff
     self:MoveToBack()
+    self.Canvas:MoveToBack()
 
     for _, v in pairs(self.mapList:GetItems()) do
         v.NumVotes = 0
