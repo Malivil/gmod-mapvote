@@ -28,24 +28,33 @@ end)
 
 local recentmaps
 if file.Exists( "mapvote/recentmaps.txt", "DATA" ) then
-    recentmaps = util.JSONToTable(file.Read("mapvote/recentmaps.txt", "DATA"))
+    recentmaps = util.JSONToTable(file.Read("mapvote/recentmaps.txt", "DATA")) or {}
 else
     recentmaps = {}
 end
 
 if file.Exists( "mapvote/config.txt", "DATA" ) then
     MapVote.Config = util.JSONToTable(file.Read("mapvote/config.txt", "DATA"))
+    if not MapVote.Config then
+        ErrorNoHalt("Failed to read mapvote/config.txt! Using default settings...")
+        MapVote.Config = {}
+    end
 else
     MapVote.Config = {}
 end
 
 local excludemaps
 if file.Exists( "ulx/votemaps.txt", "DATA" ) then
-    excludemaps = string.Split(file.Read("ulx/votemaps.txt", "DATA"), "\n")
-    for idx=#excludemaps,1,-1 do
-        local line = excludemaps[idx];
-        if string.len(line) == 0 or string.StartWith(line, ";") then
-            table.remove(excludemaps, idx);
+    local votemaps = file.Read("ulx/votemaps.txt", "DATA")
+    if not votemaps then
+        excludemaps = {}
+    else
+        excludemaps = string.Split(votemaps, "\n")
+        for idx=#excludemaps,1,-1 do
+            local line = excludemaps[idx];
+            if string.len(line) == 0 or string.StartWith(line, ";") then
+                table.remove(excludemaps, idx);
+            end
         end
     end
 else
