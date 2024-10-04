@@ -255,6 +255,8 @@ function PANEL:PerformLayout()
     self.minimButton:SetVisible(true)
 end
 
+local voter_alpha = CreateClientConVar("cl_mapvote_voter_alpha", 200, true, false, "The alpha level to use when showing voter icons. 0 = Fully transparent, 255 = Fully visible", 0, 255)
+
 function PANEL:AddVoter(voter)
     for _, v in pairs(self.Voters) do
         if v.Player and v.Player == voter then
@@ -282,7 +284,7 @@ function PANEL:AddVoter(voter)
 
     icon_container:SetTooltip(voter:Nick())
     icon_container:SetMouseInputEnabled(true)
-    icon_container:SetAlpha(200)
+    icon_container:SetAlpha(voter_alpha:GetInt())
     -- Make it look like the icon is clickable (because it is)
     icon:SetCursor("hand")
     -- Passthrough clicks from the icon to the map button
