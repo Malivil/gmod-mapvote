@@ -78,9 +78,12 @@ function CoolDownDoStuff()
     file.Write("mapvote/recentmaps.txt", util.TableToJSON(recentmaps))
 end
 
-local function GetRandomFilteredMap(maps, search_prefixes)
+local function GetRandomFilteredMap(maps, search_prefixes, allow_current, current_map)
     for _, map in RandomPairs(maps) do
         for _, search_prefix in pairs(search_prefixes) do
+            -- Exclude current map if allow_current is disabled
+            if not allow_current and map == current_map then continue end
+
             if string.find(map, search_prefix) then
                 return map:sub(1, -5)
             end
@@ -180,10 +183,11 @@ function MapVote.Start(length, current, limit, prefix, callback)
         end
     end
 
+    local currentMap = game.GetMap():lower()
     -- Gather the maps to show from the list of available maps
     for _, map in RandomPairs(maps) do
         -- If we allow the current map to show or this isn't the current map
-        if (current or game.GetMap():lower()..".bsp" ~= map) and
+        if (current or currentMap..".bsp" ~= map) and
         -- and we aren't excluding recent maps or this isn't a recent map, add it
             (not cooldown or not table.HasValue(recentmaps, map)) then
             for _, search_prefix in pairs(search_prefixes) do
@@ -218,13 +222,13 @@ function MapVote.Start(length, current, limit, prefix, callback)
             local map_results = {}
 
             for k, v in pairs(MapVote.Votes) do
-                if(not map_results[v]) then
+                if not map_results[v] then
                     map_results[v] = 0
                 end
 
                 for _, v2 in pairs(player.GetAll()) do
-                    if(v2:SteamID() == k) then
-                        if(MapVote.HasExtraVotePower(v2)) then
+                    if v2:SteamID() == k then
+                        if MapVote.HasExtraVotePower(v2) then
                             map_results[v] = map_results[v] + 2
                         else
                             map_results[v] = map_results[v] + 1
@@ -243,7 +247,7 @@ function MapVote.Start(length, current, limit, prefix, callback)
 
             local map = MapVote.CurrentMaps[winner]
             if map == MapVote.RandomPlaceholder then
-                map = GetRandomFilteredMap(maps, search_prefixes)
+                map = GetRandomFilteredMap(maps, search_prefixes, current, currentMap)
                 if map == nil then
                     ErrorNoHalt("Could not find random map with the configured prefixes!\n")
                     return
