@@ -45,7 +45,6 @@ hook.Add("Initialize", "MapVote_Initialize_AutoVote", function()
     end
 
     if GAMEMODE_NAME == "fretta" or GAMEMODE_NAME == "prop_hunt" then
-        GAMEMODE.RoundLimit = 3
         GAMEMODE.StartGamemodeVote = function()
             BroadcastLua("GAMEMODE:ScoreboardHide()")
             MapVote.Start(nil, nil, nil, nil)
