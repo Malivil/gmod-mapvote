@@ -97,9 +97,9 @@ local mapAddons = {}
 local function DownloadMapIcons(map_name)
     local foundMap = nil
     for index, map in ipairs(mapAddons) do
-        if string.find(map.title, map_name) or
-            string.find(map.file, map_name) or
-            string.find(map_name, map.title) then
+        if string.find(map.title, map_name, 1, true) or
+            string.find(map.file, map_name, 1, true) or
+            string.find(map_name, map.title, 1, true) then
             foundMap = map.wsid;
             break
         else
@@ -108,7 +108,7 @@ local function DownloadMapIcons(map_name)
                 continue
             end
             sanstring = string.sub(string.gsub(sanstring, "_", ""), 1, 5)
-            if string.find(map.title, sanstring) then
+            if string.find(map.title, sanstring, 1, true) then
                 foundMap = map.wsid;
                 break
             end
