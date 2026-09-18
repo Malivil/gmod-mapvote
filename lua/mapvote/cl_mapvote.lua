@@ -102,7 +102,7 @@ local function DownloadMapIcons(map_name)
         if string.find(map.title, map_name, 1, true) or
             string.find(map.file, map_name, 1, true) or
             string.find(map_name, map.title, 1, true) then
-            foundMap = map.wsid;
+            foundMap = map.wsid
             break
         else
             local sanstring = string.match(map_name, "_(.*)")
@@ -111,7 +111,7 @@ local function DownloadMapIcons(map_name)
             end
             sanstring = string.sub(string.gsub(sanstring, "_", ""), 1, 5)
             if string.find(map.title, sanstring, 1, true) then
-                foundMap = map.wsid;
+                foundMap = map.wsid
                 break
             end
         end
@@ -129,12 +129,12 @@ local function DownloadMapIcons(map_name)
             -- Sanity check
             if not name then return end
 
-            local fileData = file.Read(name, "GAME");
+            local fileData = file.Read(name, "GAME")
 
             -- Sanity check
             if not fileData then return end
 
-            file.Write("map_thumbnails/maps/thumb/" .. map_name .. ".png", fileData);
+            file.Write("map_thumbnails/maps/thumb/" .. map_name .. ".png", fileData)
         end)
     end)
 end
@@ -317,7 +317,7 @@ function PANEL:Think()
                 local row = math.floor(bar.NumVotes / 5)
                 local column = bar.NumVotes % 5
                 local layer = math.floor(row / 4)
-                row = row - layer * 4;
+                row = row - layer * 4
 
                 if MapVote.HasExtraVotePower(v.Player) then
                     bar.NumVotes = bar.NumVotes + 2
@@ -380,7 +380,7 @@ function PANEL:SetMaps(maps)
             net.SendToServer()
         end
 
-        button:SetPos(2,2);
+        button:SetPos(2,2)
         button:SetSize(196, 196)
 
         local text = vgui.Create("DLabel", button)
