@@ -95,6 +95,8 @@ end
 
 local mapAddons = {}
 local function DownloadMapIcons(map_name)
+    if file.Exists("map_thumbnails/maps/thumb/" .. map_name .. ".png", "DATA") then return end
+
     local foundMap = nil
     for index, map in ipairs(mapAddons) do
         if string.find(map.title, map_name, 1, true) or
@@ -127,13 +129,12 @@ local function DownloadMapIcons(map_name)
             -- Sanity check
             if not name then return end
 
-            if not file.Exists("map_thumbnails/maps/thumb/" .. map_name .. ".png", "DATA") then
-                local fileData = file.Read(name, "GAME");
-                -- Sanity check
-                if not fileData then return end
+            local fileData = file.Read(name, "GAME");
 
-                file.Write("map_thumbnails/maps/thumb/" .. map_name .. ".png", fileData);
-            end
+            -- Sanity check
+            if not fileData then return end
+
+            file.Write("map_thumbnails/maps/thumb/" .. map_name .. ".png", fileData);
         end)
     end)
 end
